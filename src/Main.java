@@ -82,6 +82,7 @@ public class Main {
         }
     }
 
+    // Main
     public static void main(String[] args) {
         insertMaze();
         visit(1,2);
