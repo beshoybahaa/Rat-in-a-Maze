@@ -73,9 +73,11 @@ public class Maze {
     }
     
     public void visit(int i, int j, int threadNumber) {
-        if (this.maze[i][j] != '1' && this.maze[i][j] != '2') {
-            this.maze[i][j] = '3';
+        if (this.maze[i][j] != '1') {
             this.visited.add(new int[]{i,j,threadNumber});
+            if (this.maze[i][j] != '2') {
+                this.maze[i][j] = '3';
+            }
         }
     }
 
