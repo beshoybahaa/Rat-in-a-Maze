@@ -1,29 +1,20 @@
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Scanner;
 
-public class Maze {
-    private int[][] maze;
+public class MazeClass {
+    public char[][] maze;
     private LinkedList<int[]> visited = new LinkedList<>();
 
-    public Maze() {}
+    public MazeClass() {}
 
-    public Maze(int n) {
-        this.maze = new int[n][n];
+    public MazeClass(int n) {
+        this.maze = new char[n][n];
     }
 
-    public void createMaze() {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.print("Enter the size of the maze (n) : ");
-        int n = scanner.nextInt();
-
-        this.maze = new int[n][n];
-
-        this.maze[0][0] = 2;
-        this.maze[n-1][n-1] = 2;
-
-        scanner.close();
+    public void createMaze(int n) {
+        this.maze = new char[n][n];
+        this.maze[0][0] = '2';
+        this.maze[n-1][n-1] = '2';
     }
 
     public void printMaze() {
@@ -43,36 +34,36 @@ public class Maze {
     }
 
     public void insertTestMaze() {
-        this.maze = new int[8][8];
+        this.maze = new char[8][8];
 
-        maze[0][0] = 2;
+        maze[0][0] = '2';
 
-        maze[1][0] = 1;
-        maze[6][0] = 1;
+        maze[1][0] = '1';
+        maze[6][0] = '1';
 
-        maze[1][1] = 1;
-        maze[4][1] = 1;
+        maze[1][1] = '1';
+        maze[4][1] = '1';
 
-        maze[4][2] = 1;
-        maze[5][2] = 1;
+        maze[4][2] = '1';
+        maze[5][2] = '1';
 
-        maze[0][3] = 1;
-        maze[1][3] = 1;
+        maze[0][3] = '1';
+        maze[1][3] = '1';
 
-        maze[3][4] = 1;
-        maze[5][4] = 1;
+        maze[3][4] = '1';
+        maze[5][4] = '1';
 
-        maze[1][5] = 1;
-        maze[3][5] = 1;
-        maze[4][5] = 1;
-        maze[5][5] = 1;
+        maze[1][5] = '1';
+        maze[3][5] = '1';
+        maze[4][5] = '1';
+        maze[5][5] = '1';
 
-        maze[0][6] = 1;
-        maze[1][6] = 1;
+        maze[0][6] = '1';
+        maze[1][6] = '1';
 
-        maze[1][7] = 1;
+        maze[1][7] = '1';
 
-        maze[7][7] = 2;
+        maze[7][7] = '2';
     }
 
     public void printVisited() {
