@@ -1,38 +1,27 @@
 import java.util.Stack;
 
 public class ThreadManagement implements Runnable {
-
-    // enter the number of N from GUI
-    Maze maze ;
-    int x;
-    int y;
-    Stack<int[]> stack = new Stack();
+    private static final Object obj = new Object();
+    private final Maze maze;
+    private final Stack<int[]> stack = new Stack<>();
     private static int numberOfCurrentThreads = 0;
+    private int x;
+    private int y;
 
     public ThreadManagement(Maze maze , int x , int y) {
         this.maze = maze;
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
     }
 
-    public static int getNumberOfCurrentThreads() {
-        return numberOfCurrentThreads;
-    }
-
-    public static void incrementNumberOfCurrentThreads(Object obj) {
-        synchronized(obj) {
-            if (numberOfCurrentThreads < 4) {
-                ++numberOfCurrentThreads;
-            }
+    public static void incrementNumberOfCurrentThreads() {
+        if (numberOfCurrentThreads < 4) {
+            ++numberOfCurrentThreads;
         }
     }
 
-    public static void decrementNumberOfCurrentThreads(Object obj) {
-        synchronized(obj) {
-            if (numberOfCurrentThreads > 0) {
-                --numberOfCurrentThreads;
-            }
-        }
+    public int[] popStack() {
+        return (int[])this.stack.pop();
     }
 
     @Override
@@ -40,16 +29,28 @@ public class ThreadManagement implements Runnable {
         int actionNumber = maze.checkNext(x,y);
         switch (actionNumber){
             case 0:
-                maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                break;
+                synchronized (obj) {
+                    maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    maze.printMaze();
+                    System.exit(0);
+                }
             case 1:
-                maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                break;
+                synchronized (obj) {
+                    maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    maze.printMaze();
+                    System.exit(0);
+                }
             case 2:
-                if(numberOfCurrentThreads!=4){
-                    ThreadManagement tm1 = new ThreadManagement(maze,x,++y);
-                    Thread t1 = new Thread(tm1);
-                    t1.start();
+                if(numberOfCurrentThreads<4){
+                    synchronized (obj) {
+                        ThreadManagement tm1 = new ThreadManagement(maze,x,y + 1);
+                        maze.visit(x,(y+1),Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        Thread t1 = new Thread(tm1);
+                        incrementNumberOfCurrentThreads();
+                        t1.start();
+                        maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        run();
+                    }
                     break;
                 }else{
                     int[] a = {++x,y};
@@ -67,14 +68,12 @@ public class ThreadManagement implements Runnable {
                 run();
                 break;
             default:
-                int[] a = popStack();
-                maze.visit(a[0],a[1],Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                run();
+                if(!this.stack.isEmpty()) {
+                    int[] a = popStack();
+                    maze.visit(a[0],a[1],Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    run();
+                }
                 break;
         }
-    }
-
-    public int[] popStack() {
-        return (int[])this.stack.pop();
     }
 }
