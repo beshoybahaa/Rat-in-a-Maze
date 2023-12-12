@@ -2,7 +2,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 public class Maze {
-    private char[][] maze;
+    char[][] maze;
     private final LinkedList<int[]> visited = new LinkedList<>();
     private int n = 0;
 
@@ -11,18 +11,13 @@ public class Maze {
     public Maze(int n) {
         this.maze = new char[n][n];
         this.n = n;
-    }
-
-    public void printMaze() {
-        int n = maze.length;
-        System.out.println("========\nMaze:\n========");
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                System.out.print(maze[i][j]);
+        for(int x = 0 ; x < this.n ; x++ ) {
+            for(int y = 0 ; y < this.n ; y++ ) {
+                maze[x][y] = '0';
             }
-            System.out.println();
         }
-        System.out.println();
+        maze[0][0] = '2';
+        maze[n-1][n-1] = '2';
     }
 
     public void insertTestMaze() {
@@ -70,6 +65,22 @@ public class Maze {
             System.out.println(Arrays.toString(element));
         }
         System.out.println();
+    }
+
+    public void printMaze() {
+        int n = maze.length;
+        System.out.println("========\nMaze:\n========");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.print(maze[i][j]);
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public void addBlock(int i, int j) {
+        this.maze[i][j] = '1';
     }
     
     public void visit(int i, int j, int threadNumber) {

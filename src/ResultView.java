@@ -1,21 +1,16 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.util.Arrays;
 
 public class ResultView extends JPanel {
     private final JButton[][] grid;
-    private final char[][] blocks;
+    private Maze maze;
     private final int n;
     private boolean found;
 
-    public ResultView(char[][] blocks) {
-        // For testing only
-        MazeClass maze = new MazeClass();
-        maze.insertTestMaze();
-        this.blocks = maze.maze;
-
-        this.n = this.blocks[0].length;
+    public ResultView(Maze maze) {
+        this.maze = maze;
+        this.n = this.maze.maze[0].length;
         grid = new JButton[n][n];
         this.setLayout(new GridLayout(n, n));
         this.setBackground(new Color(200, 200, 200));
@@ -56,13 +51,13 @@ public class ResultView extends JPanel {
                 // Init all squares text
                 grid[x][y] = new JButton("");
                 // Check square state
-                if (blocks[x][y] == '4') { // Res
-                    grid[x][y].setBackground(new Color(0, 100, 0));
+                if (maze.maze[x][y] == '3') { // Res
+                    grid[x][y].setBackground(new Color(0, 255, 0));
                     grid[x][y].setForeground(new Color(0, 255, 0));
-                } else if (blocks[x][y] == '1') { // Block
+                } else if (maze.maze[x][y] == '1') { // Block
                     grid[x][y].setBackground(new Color(0, 0, 0));
                     grid[x][y].setForeground(new Color(0, 0, 0));
-                } else if (blocks[x][y] == '2') { // Start or End
+                } else if (maze.maze[x][y] == '2') { // Start or End
                     if( x == 0 && y== 0 ) {
                         grid[x][y] = new JButton("Start");
                     } else {

@@ -32,13 +32,13 @@ public class ThreadManagement implements Runnable {
                 synchronized (obj) {
                     maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     maze.printMaze();
-                    System.exit(0);
+                    //System.exit(0);
                 }
             case 1:
                 synchronized (obj) {
                     maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     maze.printMaze();
-                    System.exit(0);
+                    //System.exit(0);
                 }
             case 2:
                 if(numberOfCurrentThreads<4){

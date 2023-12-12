@@ -5,16 +5,12 @@ import java.util.Arrays;
 
 public class MazeView extends JPanel {
     private final JButton[][] grid;
-    private final char[][] blocks;
+    private final Maze maze;
     private final int n;
 
     public MazeView(int n) {
         this.n = n;
-        blocks = new char[n][n];
-        for (char[] arr1 : blocks)
-            Arrays.fill(arr1, '0');
-        blocks[0][0] = '2';
-        blocks[n - 1][n - 1] = '2';
+        this.maze = new Maze(n);
         grid = new JButton[n][n];
         this.setLayout(new GridLayout(n, n));
         this.setBackground(new Color(255, 255, 255));
@@ -31,20 +27,21 @@ public class MazeView extends JPanel {
                             // End button clicked
                             JOptionPane.showMessageDialog(null, "Select the blocks squares, Then click Start)");
                         } else if (grid[0][0] == selectedBtn) {
-                            // Start button clicked (Start solving the maze)
                             MazeView.this.removeAll();
                             revalidate();
                             repaint();
                             try {
-                                new ResultFrame(blocks);
+                                ThreadManagement tm1 = new ThreadManagement(maze,0,0);
+                                Thread t1 = new Thread(tm1);
+                                t1.start();
+                                new ResultFrame(maze);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                             JFrame terminate = (JFrame) SwingUtilities.getWindowAncestor(getParent());
                             terminate.dispose();
                         } else {
-                            // Square is clicked (Make it a block)
-                            blocks[row][col] = '0';
+                            this.maze.addBlock(row, col);
                             grid[row][col].setBackground(new Color(0, 0, 0));
                             grid[row][col].setForeground(new Color(255, 255, 255));
                         }
