@@ -1,3 +1,4 @@
+import java.util.Set;
 import java.util.Stack;
 
 public class ThreadManagement implements Runnable {
@@ -7,6 +8,7 @@ public class ThreadManagement implements Runnable {
     private static int numberOfCurrentThreads = 0;
     private int x;
     private int y;
+    private static boolean found=false;
 
     public ThreadManagement(Maze maze , int x , int y) {
         this.maze = maze;
@@ -24,56 +26,66 @@ public class ThreadManagement implements Runnable {
         return (int[])this.stack.pop();
     }
 
+
+
     @Override
     public void run() {
-        int actionNumber = maze.checkNext(x,y);
-        switch (actionNumber){
-            case 0:
+        if (found == true) {
+            return;
+        }
+//        synchronized (obj) {
+            int actionNumber = maze.checkNext(x, y);
+            switch (actionNumber) {
+                case 0:
                 synchronized (obj) {
-                    maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     maze.printMaze();
-                    //System.exit(0);
+                    found = true;
+                    break;
+
                 }
-            case 1:
+                case 1:
                 synchronized (obj) {
-                    maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    maze.visit(x, ++y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     maze.printMaze();
-                    //System.exit(0);
+                    found = true;
+                    break;
                 }
-            case 2:
-                if(numberOfCurrentThreads<4){
-                    synchronized (obj) {
-                        ThreadManagement tm1 = new ThreadManagement(maze,x,y + 1);
-                        maze.visit(x,(y+1),Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                case 2:
+                    if (numberOfCurrentThreads < 4) {
+//                    synchronized (obj) {
+                        ThreadManagement tm1 = new ThreadManagement(maze, x, y + 1);
+                        maze.visit(x, (y + 1), Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                         Thread t1 = new Thread(tm1);
                         incrementNumberOfCurrentThreads();
                         t1.start();
-                        maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        run();
+//                    }
+                        break;
+                    } else {
+                        int[] a = {++x, y};
+                        stack.push(a);
+                        maze.visit(x, ++y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                         run();
                     }
                     break;
-                }else{
-                    int[] a = {++x,y};
-                    stack.push(a);
-                    maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                case 3:
+                    maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     run();
-                }
-                break;
-            case 3:
-                maze.visit(++x,y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                run();
-                break;
-            case 4:
-                maze.visit(x,++y,Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                run();
-                break;
-            default:
-                if(!this.stack.isEmpty()) {
-                    int[] a = popStack();
-                    maze.visit(a[0],a[1],Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    break;
+                case 4:
+                    maze.visit(x, ++y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                     run();
-                }
-                break;
+                    break;
+                default:
+                    if (!this.stack.isEmpty()) {
+                        int[] a = popStack();
+                        maze.visit(a[0], a[1], Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        run();
+                    }
+                    break;
+            }
         }
-    }
+//    }
 }

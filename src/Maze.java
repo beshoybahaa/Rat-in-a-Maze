@@ -61,8 +61,11 @@ public class Maze {
 
     public void printVisited() {
         System.out.println("========\nVisited:\n========");
+        int i=1;
         for (int[] element : this.visited) {
+            System.out.print(i + ") ");
             System.out.println(Arrays.toString(element));
+            i++;
         }
         System.out.println();
     }

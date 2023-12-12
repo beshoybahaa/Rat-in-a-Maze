@@ -72,7 +72,8 @@ public class ResultView extends JPanel {
                 }
                 grid[x][y].addActionListener(buttonListener);
                 this.add(grid[x][y]);
+
             }
-        }
+        }maze.printVisited();
     }
 }
