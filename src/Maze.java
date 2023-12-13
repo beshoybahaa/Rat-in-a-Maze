@@ -3,6 +3,7 @@ import java.util.LinkedList;
 
 public class Maze {
     char[][] maze;
+    int[][] threadid;
     private final LinkedList<int[]> visited = new LinkedList<>();
     private int n = 0;
 
@@ -10,6 +11,7 @@ public class Maze {
 
     public Maze(int n) {
         this.maze = new char[n][n];
+        this.threadid = new int[n][n];
         this.n = n;
         for(int x = 0 ; x < this.n ; x++ ) {
             for(int y = 0 ; y < this.n ; y++ ) {
@@ -89,6 +91,8 @@ public class Maze {
     public void visit(int i, int j, int threadNumber) {
         if (this.maze[i][j] != '1') {
             this.visited.add(new int[]{i,j,threadNumber});
+            String s = Thread.currentThread().getName();
+            this.threadid[i][j] = Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
             if (this.maze[i][j] != '2') {
                 this.maze[i][j] = '3';
             }

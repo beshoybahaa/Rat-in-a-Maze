@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 public class ResultView extends JPanel {
     private final JButton[][] grid;
-    private Maze maze;
+    private final Maze maze;
     private final int n;
     private boolean found;
 
@@ -51,21 +51,20 @@ public class ResultView extends JPanel {
                 // Init all squares text
                 grid[x][y] = new JButton("");
                 // Check square state
-                if (maze.maze[x][y] == '3') { // Res
-                    grid[x][y].setBackground(new Color(0, 255, 0));
-                    grid[x][y].setForeground(new Color(0, 255, 0));
-                } else if (maze.maze[x][y] == '1') { // Block
+                if (maze.maze[x][y] == '1') { // Block
                     grid[x][y].setBackground(new Color(0, 0, 0));
                     grid[x][y].setForeground(new Color(0, 0, 0));
                 } else if (maze.maze[x][y] == '2') { // Start or End
                     if( x == 0 && y== 0 ) {
                         grid[x][y] = new JButton("Start");
+                        grid[x][y].setBackground(new Color(0, 150, 120));
+                        grid[x][y].setForeground(new Color(255, 255, 255));
                     } else {
                         grid[x][y] = new JButton("End");
+                        colorSquares(x, y);
                     }
-                    // Start & End Button Colors
-                    grid[x][y].setBackground(new Color(0, 150, 120));
-                    grid[x][y].setForeground(new Color(255, 255, 255));
+                } else if (maze.maze[x][y] == '3') {
+                    colorSquares(x, y);
                 } else { // Empty
                     grid[x][y].setBackground(new Color(255, 255, 255));
                     grid[x][y].setForeground(new Color(0, 0, 0));
@@ -74,6 +73,32 @@ public class ResultView extends JPanel {
                 this.add(grid[x][y]);
 
             }
-        }maze.printVisited();
+        }
     }
+
+    private void colorSquares(int x, int y) {
+        switch (this.maze.threadid[x][y]) {
+            case 0:
+                grid[x][y].setBackground(new Color(255, 0, 0));
+                grid[x][y].setForeground(new Color(255, 0, 0));
+                break;
+            case 1:
+                grid[x][y].setBackground(new Color(81, 1, 178));
+                grid[x][y].setForeground(new Color(81, 1, 178));
+                break;
+            case 2:
+                grid[x][y].setBackground(new Color(247, 255, 0));
+                grid[x][y].setForeground(new Color(247, 255, 0));
+                break;
+            case 3:
+                grid[x][y].setBackground(new Color(0, 255, 0));
+                grid[x][y].setForeground(new Color(0, 255, 0));
+                break;
+            default:
+                grid[x][y].setBackground(new Color(255, 0, 234));
+                grid[x][y].setForeground(new Color(0, 255, 0));
+                break;
+        }
+    }
+
 }
