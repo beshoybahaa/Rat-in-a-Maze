@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
 
 public class ResultView extends JPanel {
     private final JButton[][] grid;
@@ -73,6 +74,16 @@ public class ResultView extends JPanel {
                 this.add(grid[x][y]);
 
             }
+        }
+        // Displaying thread number on the blocks
+        for (int i = 0 ; i < maze.visited.size() ; i++) {
+            int[] node = maze.visited.get(i);
+            int x = node[0];
+            int y = node[1];
+            int thread = node[2];
+            grid[x][y].setText(grid[x][y].getText() + " " + String.valueOf(thread));
+            grid[x][y].setFont(new Font(String.valueOf(thread), Font.ITALIC, 25));
+            grid[x][y].setForeground(new Color(0, 0, 0));
         }
     }
 

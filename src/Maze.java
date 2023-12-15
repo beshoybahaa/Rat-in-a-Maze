@@ -4,7 +4,7 @@ import java.util.LinkedList;
 public class Maze {
     char[][] maze;
     int[][] threadid;
-    private final LinkedList<int[]> visited = new LinkedList<>();
+    public final LinkedList<int[]> visited = new LinkedList<>();
     private int n = 0;
 
     public Maze() {}
