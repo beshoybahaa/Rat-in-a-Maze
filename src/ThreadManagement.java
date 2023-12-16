@@ -18,8 +18,14 @@ public class ThreadManagement implements Runnable {
     }
 
     public static void incrementNumberOfCurrentThreads() {
-        if (numberOfCurrentThreads < 3) {
+        if (getNumberOFCurrentThreads() < 3) {
             ++numberOfCurrentThreads;
+        }
+    }
+
+    public static int getNumberOFCurrentThreads() {
+        synchronized (obj) {
+            return numberOfCurrentThreads;
         }
     }
 
@@ -48,34 +54,64 @@ public class ThreadManagement implements Runnable {
                 break;
             }
             case 2:
-                synchronized (obj) {
-                    if (numberOfCurrentThreads < 3) {
+                if (getNumberOFCurrentThreads() < 3) {
+                    Thread t1;
+                    synchronized (obj) {
                         ThreadManagement tm1 = new ThreadManagement(maze, x, y, solutionView);
-                        Thread t1 = new Thread(tm1);
+                        t1 = new Thread(tm1);
                         incrementNumberOfCurrentThreads();
-                        t1.start();
-                        maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                        run();
-                    } else {
-                        int[] a = {x, y+1};
-                        stack.push(a);
-                        maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
-                        run();
                     }
+                    t1.start();
+                    maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    run();
+                } else {
+                    int[] a = {x, y+1};
+                    stack.push(a);
+                    maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    run();
                 }
                 break;
             case 3:
                 maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 run();
                 break;
             case 4:
                 maze.visit(x, ++y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
                 run();
                 break;
             default:
                 if (!this.stack.isEmpty()) {
                     int[] a = popStack();
-                    maze.visit(a[0], a[1], Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    this.x = a[0];
+                    this.y = a[1];
+                    if(this.maze.maze[x][y] == '0') {
+                        maze.visit(x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                    }
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
                     run();
                 }
                 break;
