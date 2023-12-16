@@ -31,9 +31,6 @@ public class MazeView extends JPanel {
                             revalidate();
                             repaint();
                             try {
-                                ThreadManagement tm1 = new ThreadManagement(maze,0,0);
-                                Thread t1 = new Thread(tm1);
-                                t1.start();
                                 new ResultFrame(maze);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();

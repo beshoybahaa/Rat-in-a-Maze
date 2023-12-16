@@ -12,6 +12,9 @@ public class ResultFrame extends JFrame {
         this.setLocation(0, 0);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         ResultView solutionView = new ResultView(maze);
+        ThreadManagement tm1 = new ThreadManagement(maze,0,0, solutionView);
+        Thread t1 = new Thread(tm1);
+        t1.start();
         this.add(solutionView);
     }
 }

@@ -4,8 +4,8 @@ import java.awt.event.ActionListener;
 import java.util.Arrays;
 
 public class ResultView extends JPanel {
-    private final JButton[][] grid;
-    private final Maze maze;
+    private JButton[][] grid;
+    private Maze maze;
     private final int n;
     private boolean found;
 
@@ -85,6 +85,43 @@ public class ResultView extends JPanel {
             grid[x][y].setFont(new Font(String.valueOf(thread), Font.ITALIC, 25));
             grid[x][y].setForeground(new Color(0, 0, 0));
         }
+    }
+
+    public void createResultPath(Maze maze) {
+        this.maze = maze;
+        for (int x = 0; x < n; x++) {
+            for (int y = 0; y < n; y++) {
+                // Check square state
+                if (maze.maze[x][y] == '1') { // Block
+                    this.grid[x][y].setBackground(new Color(0, 0, 0));
+                    this.grid[x][y].setForeground(new Color(0, 0, 0));
+                } else if (maze.maze[x][y] == '2') { // Start or End
+                    if( x == 0 && y== 0 ) {
+                        this.grid[x][y].setBackground(new Color(0, 150, 120));
+                        this.grid[x][y].setForeground(new Color(255, 255, 255));
+                    } else {
+                        colorSquares(x, y);
+                    }
+                } else if (maze.maze[x][y] == '3') {
+                    colorSquares(x, y);
+                } else { // Empty
+                    this.grid[x][y].setBackground(new Color(255, 255, 255));
+                    this.grid[x][y].setForeground(new Color(0, 0, 0));
+                }
+                // Displaying thread number on the blocks
+                for (int i = 0 ; i < maze.visited.size() ; i++) {
+                    int[] node = maze.visited.get(i);
+                    int xx = node[0];
+                    int yy = node[1];
+                    int thread = node[2];
+                    grid[xx][yy].setText(String.valueOf(thread));
+                    grid[xx][yy].setFont(new Font(String.valueOf(thread), Font.ITALIC, 25));
+                    grid[xx][yy].setForeground(new Color(0, 0, 0));
+                }
+            }
+            repaint();
+        }
+        repaint();
     }
 
     private void colorSquares(int x, int y) {

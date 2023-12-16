@@ -8,11 +8,13 @@ public class ThreadManagement implements Runnable {
     private int x;
     private int y;
     private static boolean found=false;
+    private ResultView solutionView;
 
-    public ThreadManagement(Maze maze , int x , int y) {
+    public ThreadManagement(Maze maze , int x , int y, ResultView solutionView) {
         this.maze = maze;
         this.x = x;
         this.y = y;
+        this.solutionView = solutionView;
     }
 
     public static void incrementNumberOfCurrentThreads() {
@@ -27,6 +29,7 @@ public class ThreadManagement implements Runnable {
 
     @Override
     public void run() {
+        solutionView.createResultPath(this.maze);
         if (found) {
             return;
         }
@@ -47,7 +50,7 @@ public class ThreadManagement implements Runnable {
             case 2:
                 synchronized (obj) {
                     if (numberOfCurrentThreads < 3) {
-                        ThreadManagement tm1 = new ThreadManagement(maze, x, y);
+                        ThreadManagement tm1 = new ThreadManagement(maze, x, y, solutionView);
                         Thread t1 = new Thread(tm1);
                         incrementNumberOfCurrentThreads();
                         t1.start();
