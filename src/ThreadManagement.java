@@ -54,9 +54,9 @@ public class ThreadManagement implements Runnable {
                         maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                         run();
                     } else {
-                        int[] a = {x + 1, y};
+                        int[] a = {x, y+1};
                         stack.push(a);
-                        maze.visit(x, y + 1, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
+                        maze.visit(++x, y, Integer.parseInt(String.valueOf(Thread.currentThread().getId())));
                         run();
                     }
                 }

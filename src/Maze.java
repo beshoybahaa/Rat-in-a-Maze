@@ -90,10 +90,10 @@ public class Maze {
     
     public void visit(int i, int j, int threadNumber) {
         if (this.maze[i][j] != '1') {
-            this.visited.add(new int[]{i,j,threadNumber});
-            String s = Thread.currentThread().getName();
+            this.visited.add(new int[]{i,j,threadNumber}); // add node to visited
+            String s = Thread.currentThread().getName(); // thread number for GUI coloring
             this.threadid[i][j] = Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
-            if (this.maze[i][j] != '2') {
+            if (this.maze[i][j] != '2') { // if not the end => visit node
                 this.maze[i][j] = '3';
             }
         }
