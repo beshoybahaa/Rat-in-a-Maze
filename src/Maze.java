@@ -22,6 +22,39 @@ public class Maze {
         maze[n-1][n-1] = '2';
     }
 
+    public void addBlock(int i, int j) {
+        this.maze[i][j] = '1';
+    }
+    
+    public void visit(int i, int j, int threadNumber) {
+        if (this.maze[i][j] != '1') {
+            this.visited.add(new int[]{i,j,threadNumber}); // add node to visited
+            String s = Thread.currentThread().getName(); // thread number for GUI coloring
+            this.threadid[i][j] = Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
+            if (this.maze[i][j] != '2') { // if not the end => visit node
+                this.maze[i][j] = '3';
+            }
+        }
+    }
+
+    public int checkNext(int i, int j) {
+        char forward;
+        char down;
+
+        if (j+1 < this.n) forward = maze[i][j+1];
+        else forward = '1';
+        if (i+1 < this.n) down = maze[i+1][j];
+        else down = '1';
+
+        if(forward == '2' || down == '2') {
+            if(forward == '2') return 1;
+            else return 0;
+        } else if (forward == '0' && down == '0' ) return 2;
+        else if (down == '0') return 3;
+        else if(forward == '0') return 4;
+        else return 999;
+    }
+
     public void insertTestMaze() {
         this.n = 8;
         this.maze = new char[8][8];
@@ -82,38 +115,5 @@ public class Maze {
             System.out.println();
         }
         System.out.println();
-    }
-
-    public void addBlock(int i, int j) {
-        this.maze[i][j] = '1';
-    }
-    
-    public void visit(int i, int j, int threadNumber) {
-        if (this.maze[i][j] != '1') {
-            this.visited.add(new int[]{i,j,threadNumber}); // add node to visited
-            String s = Thread.currentThread().getName(); // thread number for GUI coloring
-            this.threadid[i][j] = Integer.parseInt(String.valueOf(s.charAt(s.length() - 1)));
-            if (this.maze[i][j] != '2') { // if not the end => visit node
-                this.maze[i][j] = '3';
-            }
-        }
-    }
-
-    public int checkNext(int i, int j) {
-        char forward;
-        char down;
-
-        if (j+1 < this.n) forward = maze[i][j+1];
-        else forward = '1';
-        if (i+1 < this.n) down = maze[i+1][j];
-        else down = '1';
-
-        if(forward == '2' || down == '2') {
-            if(forward == '2') return 1;
-            else return 0;
-        } else if (forward == '0' && down == '0' ) return 2;
-        else if (down == '0') return 3;
-        else if(forward == '0') return 4;
-        else return 999;
     }
 }
