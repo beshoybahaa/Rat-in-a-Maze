@@ -5,7 +5,7 @@ import java.util.Arrays;
 
 public class MazeView extends JPanel {
     private final JButton[][] grid;
-    private final Maze maze;
+    private Maze maze;
     private final int n;
 
     public MazeView(int n) {
@@ -25,8 +25,24 @@ public class MazeView extends JPanel {
                     if (grid[row][col] == selectedBtn) {
                         if (grid[n-1][n-1] == selectedBtn) {
                             // End button clicked
-                            JOptionPane.showMessageDialog(null, "Select the blocks squares, Then click Start)");
+                            MazeView.this.removeAll();
+                            revalidate();
+                            this.maze = new Maze(n);
+                            buildGrid();
+                            repaint();
                         } else if (grid[0][0] == selectedBtn) {
+                            int numberOfBlocks = 0;
+                            for (int xx = 0; xx < grid.length; xx++) {
+                                for (int yy = 0; yy < this.maze.maze[xx].length; yy++) {
+                                    if(this.maze.maze[xx][yy] == '1') {
+                                        numberOfBlocks++;
+                                    }
+                                }
+                            }
+                            if(numberOfBlocks == 0) {
+                                JOptionPane.showMessageDialog(null, "Add blocks to start");
+                                return;
+                            }
                             MazeView.this.removeAll();
                             revalidate();
                             repaint();

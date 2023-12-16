@@ -25,14 +25,11 @@ public class ResultView extends JPanel {
                 for (JButton jButton : jButtons) {
                     if (jButton == selectedBtn) {
                         if (grid[0][0] == selectedBtn) {
-                            JOptionPane.showMessageDialog(null, "Start new game?");
-                            ResultView.this.removeAll();
-                            revalidate();
-                            repaint();
-                            new StartFrame();
+                            JOptionPane.showMessageDialog(null, "End the game?");
                             JFrame terminate = (JFrame) SwingUtilities.getWindowAncestor(getParent());
                             terminate.dispose();
                         } else if (grid[n-1][n-1] == selectedBtn) {
+                            JOptionPane.showMessageDialog(null, "End the game?");
                             JFrame terminate = (JFrame) SwingUtilities.getWindowAncestor(getParent());
                             terminate.dispose();
                         } else {
